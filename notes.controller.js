@@ -22,9 +22,18 @@ async function removeNote(id) {
     if (removedNoteIndex !== -1) {
         newNotes.splice(removedNoteIndex, 1);
         await fs.writeFile(notesPath, JSON.stringify(newNotes));
-        console.log(chalk.bgRed(`Note "${notes[removedNoteIndex].title}" removed`));
+        console.log(chalk.bgRed(`Note "${notes[removedNoteIndex].title}" has been removed`));
     } else
         console.log(chalk.bgGrey('Note undefined'));
+}
+
+async function changeNote(id, title) {
+    const notes = await getNotes();
+    const newNotes = notes.slice();
+    const changeNoteIndex = newNotes.findIndex(note => note.id === id);
+    newNotes[changeNoteIndex].title = title;
+    await fs.writeFile(notesPath, JSON.stringify(newNotes));
+    console.log(chalk.bgMagenta(`Note "${notes[changeNoteIndex].title}" has been changed`));
 }
 
 async function getNotes() {
@@ -39,5 +48,5 @@ async function printNotes() {
 }
 
 module.exports = {
-    addNote, removeNote, printNotes,
+    addNote, removeNote, changeNote, printNotes, getNotes,
 };
